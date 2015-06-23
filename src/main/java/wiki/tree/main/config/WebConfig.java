@@ -31,6 +31,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         viewResolver.setPrefix("/templates/");
         viewResolver.setSuffix(".html");
         viewResolver.setViewClass(DustjsView.class);
+        viewResolver.setCache(false);
 
         registry.viewResolver(viewResolver);
     }

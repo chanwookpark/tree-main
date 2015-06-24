@@ -1,4 +1,4 @@
-package wiki.tree.main.core.domain;
+package wiki.tree.main.domain;
 
 /**
  * @author chanwook

@@ -15,23 +15,39 @@ public class DocumentEditorController {
 
     String content;
 
-    @RequestMapping(value = "/doc/{docId}/edit", method = RequestMethod.GET)
-    public String viewEditor(@PathVariable String docId, DustModel model) {
-        model.put("docId", docId);
+    @RequestMapping(value = "/doc/{docName}/edit", method = RequestMethod.GET)
+    public String viewEditor(@PathVariable String docName, DustModel model) {
+        model.put("docName", docName);
         model.put("content", content);
         return "editor";
     }
 
-    @RequestMapping(value = "/doc/{docId}/save", method = RequestMethod.POST)
-    public String save(@PathVariable String docId, @RequestParam("content") String content) {
+    @RequestMapping(value = "/doc/{docName}/save", method = RequestMethod.POST)
+    public String save(@PathVariable String docName,
+                       @RequestParam String content) {
         this.content = content;
-        return "redirect:/doc/{docId}";
+        return "redirect:/doc/" + docName;
     }
 
-    @RequestMapping(value = "/doc/{docId}", method = RequestMethod.GET)
-    public String view(@PathVariable String docId, DustModel model) {
-        model.put("docId", docId);
+    @RequestMapping(value = "/doc/create", method = RequestMethod.GET)
+    public String viewEditor(DustModel model) {
+        model.put("docName", "");
+        model.put("content", "");
+        return "editor";
+    }
+
+    @RequestMapping(value = "/doc/save", method = RequestMethod.POST)
+    public String create(@RequestParam String docName,
+                         @RequestParam String content) {
+        this.content = content;
+        return "redirect:/doc/" + docName;
+    }
+
+    @RequestMapping(value = "/doc/{docName}", method = RequestMethod.GET)
+    public String view(@PathVariable String docName, DustModel model) {
+        model.put("docName", docName);
         model.put("content", content);
         return "view";
     }
+
 }

@@ -13,10 +13,19 @@
 
     <!-- Content -->
     <div class="container">
-        <div class="page-header">
-            <h1>타이틀!!</h1>
-        </div>
-        <form action="/doc/{docId}/save" method="POST">
+        {^docName}
+        <form action="/doc/save" method="POST">
+            <div class="page-header">
+                <input type="text" name="docName" placeholder="제목을 입력하세요!">
+            </div>
+        {/docName}
+        {?docName}
+        <form action="/doc/{docName}/save" method="POST">
+            <div>
+                <h2>{docName}</h2>
+            </div>
+        {/docName}
+
             <textarea id="content-editor" name="content">
                 {content}
             </textarea>

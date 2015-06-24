@@ -2,8 +2,6 @@
 <html lang="kr">
 <head>
     {>"head" title="Tree Wiki" /}
-    <!-- Codemirror CSS -->
-    <link href="/codemirror/lib/codemirror.css" rel="stylesheet">
 
 </head>
 
@@ -15,13 +13,11 @@
     <div class="container">
         <div class="page-header">
             <h1>타이틀!!</h1>
+            <a class="btn btn-primary" href="/doc/{docId}/edit" role="button">EDIT</a>
         </div>
-        <form action="/doc/{docId}/save" method="POST">
-            <textarea id="content-editor" name="content">
-                {content}
-            </textarea>
-            <input class="btn btn-default" type="submit" title="저장">
-        </form>
+        <p class="lead">
+            {content}
+        </p>
         <div class="doc-meta">
             <p>블라블라...</p>
         </div>

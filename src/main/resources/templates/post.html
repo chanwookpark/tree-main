@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    {>"head" title="Tree Wiki" /}
+</head>
+
+<body>
+
+    {>"navbar" /}
+
+    <!-- Content -->
+    <div class="container">
+        <ul>
+        {#page.content}
+            <li>{$idx}. <a href="/doc/{name}">{name}</a></li>
+        {/page.content}
+        </ul>
+    </div>
+    <!-- Content -->
+
+    {>"footer" /}
+
+    {>"includejs" /}
+
+</body>
+</html>

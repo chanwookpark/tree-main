@@ -1,6 +1,7 @@
 package wiki.tree.main.domain;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -17,11 +18,15 @@ public class Document {
 
     private String content;
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd hh:mm")
     private Date created;
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd hh:mm")
     private Date updated;
 
     private long revision;
+
+    private String updateUser;
 
     public Document() {
     }
@@ -82,8 +87,17 @@ public class Document {
         this.revision = revision;
     }
 
-    public void update(String updateContent, Date updateTime) {
+    public String getUpdateUser() {
+        return updateUser;
+    }
+
+    public void setUpdateUser(String updateUser) {
+        this.updateUser = updateUser;
+    }
+
+    public void update(String updateContent, Date updateTime, String updateUser) {
         this.content = updateContent;
         this.updated = updateTime;
+        this.updateUser = updateUser;
     }
 }

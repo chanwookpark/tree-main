@@ -35,7 +35,9 @@ public class DocumentController {
     public String save(@PathVariable String docName,
                        @RequestParam String content) throws UnsupportedEncodingException {
         final Document doc = r.findByName(docName);
-        doc.update(content, DateTime.now().toDate());
+        // 이건 세션처리를 어떻게 할까나?
+        doc.update(content, DateTime.now().toDate(), "박찬욱");
+
         r.save(doc);
         return "redirect:/doc/" + encoding(docName);
     }
@@ -68,6 +70,7 @@ public class DocumentController {
     private Document createDocument(String docName, String content) {
         final Date now = DateTime.now().toDate();
         final Document d = new Document(docName, content, now, now, 1);
+        d.setUpdateUser("박찬욱");
         return d;
     }
 

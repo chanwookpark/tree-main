@@ -5,16 +5,37 @@
 </head>
 
 <body>
-
     {>"navbar" /}
 
     <!-- Content -->
     <div class="container">
-        <ul>
-        {#page.content}
-            <li>{$idx}. <a href="/doc/{name}">{name}</a></li>
-        {/page.content}
-        </ul>
+        <h2>
+            POST
+            <a class="btn btn-info btn-xs" href="/post/rss" role="button">RSS</a>
+        </h2>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <td class="col-xs-2"></td>
+                    <td class="col-xs-6"></td>
+                </tr>
+            </thead>
+            <tbody>
+                {#page.content}
+                <tr>
+                    <td>
+                        <small>{updated}</small>
+                    </td>
+                    <td>
+                        <small>{updateUser}</small><br>
+                        <a href="/doc/{name}">{name}</a>
+                    </td>
+                </tr>
+                {/page.content}
+            </tbody>
+        </table>
+        <div>
+        </div>
     </div>
     <!-- Content -->
 

@@ -11,6 +11,8 @@ import r2.dustjs.spring.DustModel;
 import wiki.tree.main.domain.Document;
 import wiki.tree.main.repository.DocumentRepository;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Date;
 
 /**
@@ -31,11 +33,11 @@ public class DocumentController {
 
     @RequestMapping(value = "/doc/{docName}/save", method = RequestMethod.POST)
     public String save(@PathVariable String docName,
-                       @RequestParam String content) {
+                       @RequestParam String content) throws UnsupportedEncodingException {
         final Document doc = r.findByName(docName);
         doc.update(content, DateTime.now().toDate());
         r.save(doc);
-        return "redirect:/doc/" + docName;
+        return "redirect:/doc/" + encoding(docName);
     }
 
     @RequestMapping(value = "/doc/create", method = RequestMethod.GET)
@@ -47,17 +49,20 @@ public class DocumentController {
 
     @RequestMapping(value = "/doc/save", method = RequestMethod.POST)
     public String create(@RequestParam String docName,
-                         @RequestParam String content) {
+                         @RequestParam String content) throws UnsupportedEncodingException {
         r.save(createDocument(docName, content));
-        return "redirect:/doc/" + docName;
+        return "redirect:/doc/" + encoding(docName);
     }
-
 
     @RequestMapping(value = "/doc/{docName}", method = RequestMethod.GET)
     public String view(@PathVariable String docName, DustModel model) {
         model.put("docName", docName);
         model.put("document", r.findByName(docName));
         return "view";
+    }
+
+    private String encoding(String docName) throws UnsupportedEncodingException {
+        return URLEncoder.encode(docName, "UTF-8");
     }
 
     private Document createDocument(String docName, String content) {

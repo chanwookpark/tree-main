@@ -10,6 +10,7 @@ public class DocumentEditorForm {
     private String content;
 
     private String tag;
+    private String docId;
 
     public String getDocName() {
         return docName;
@@ -33,5 +34,13 @@ public class DocumentEditorForm {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public void setDocId(String docId) {
+        this.docId = docId;
+    }
+
+    public String getDocId() {
+        return docId;
     }
 }

@@ -12,21 +12,42 @@
 <!-- Content -->
 <div class="container">
     {#document}
-    <a class="btn btn-primary" href="/doc/{name}/edit" role="button">EDIT</a>
     <article itemscope itemtype="http://schema.org/Article">
         <header>
             <div class="page-header">
                 <h1>{name}</h1>
             </div>
+            <div>
+                <table>
+                    <tr>
+                        <td>생성: {created}</td>
+                        <td>(rev.{revision})</td>
+                        <td colspan="2">
+                            <a class="btn btn-primary" href="/doc/{name}/edit" role="button">EDIT</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>갱신: {update}</td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
         </header>
         <section>
-            {content}
+            <p>{content}</p>
+        </section>
+        <section>
+            <p>
+                {#tag}
+                <a href="/tag/{value}">{value}</a>&nbsp;
+                {/tag}
+            </p>
         </section>
     </article>
+    {/document}
     <div class="doc-meta">
         <p>블라블라...</p>
     </div>
-    {/document}
 </div>
 <!-- Content -->
 

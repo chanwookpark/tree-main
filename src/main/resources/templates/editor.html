@@ -6,48 +6,51 @@
 
 <body>
 
-    {>"navbar" /}
+{>"navbar" /}
 
-    <!-- Content -->
-    <div class="container">
-        <form action="/doc/save" method="POST">
+<!-- Content -->
+<div class="container">
+    <form action="/doc/save" method="POST">
         {^docName}
-            <div class="page-header">
-                <input type="text" name="docName" placeholder="제목을 입력하세요!">
-            </div>
+        <div class="page-header">
+            <input type="text" name="docName" placeholder="제목을 입력하세요!">
+        </div>
         {/docName}
         {?docName}
-            <div>
-                <input type="hidden" name="docName" value="{docName}">
-                <h2>{docName}</h2>
-            </div>
+        <div>
+            <input type="hidden" name="docName" value="{docName}">
+
+            <h2>{docName}</h2>
+        </div>
         {/docName}
 
-            <textarea id="content-editor" name="content">
-                {document.content}
-            </textarea>
-            <input class="btn btn-default" type="submit" title="저장">
-        </form>
-        <div class="doc-meta">
-            <p>블라블라...</p>
-        </div>
+        <textarea id="content-editor" name="content">
+            {document.content}
+        </textarea>
+
+        <input type="text" name="tag" value="{tag}" placeholder="공백으로 구분해 입력"><br>
+        <input class="btn btn-default" type="submit" title="저장">
+    </form>
+    <div class="doc-meta">
+        <p>블라블라...</p>
     </div>
-    <!-- Content -->
+</div>
+<!-- Content -->
 
-    {>"footer" /}
+{>"footer" /}
 
-    {>"includejs" /}
+{>"includejs" /}
 
-    <!-- Codemirror JS -->
-    <script src="/codemirror/lib/codemirror.js"></script>
-    <script src="/codemirror/mode/javascript/javascript.js"></script>
+<!-- Codemirror JS -->
+<script src="/codemirror/lib/codemirror.js"></script>
+<script src="/codemirror/mode/javascript/javascript.js"></script>
 
-    <script>
-        var editor = CodeMirror.fromTextArea(document.getElementById("content-editor"), {
-            lineNumbers: true,
-            mode: "text/html",
-            matchBrackets: true
-        });
-    </script>
+<script>
+    var editor = CodeMirror.fromTextArea(document.getElementById("content-editor"), {
+        lineNumbers: true,
+        mode: "text/html",
+        matchBrackets: true
+    });
+</script>
 </body>
 </html>

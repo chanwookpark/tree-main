@@ -15,6 +15,19 @@ public class Tag {
 
     private String reference;
 
+    public Tag() {
+    }
+
+    public Tag(String tagId) {
+        this.id = tagId;
+    }
+
+    public Tag(String value, String reference) {
+        this.value = value;
+        this.reference = reference;
+    }
+
+
     public String getId() {
         return id;
     }

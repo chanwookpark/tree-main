@@ -44,11 +44,6 @@ public class WebConfig extends WebMvcAutoConfiguration.WebMvcAutoConfigurationAd
         CharacterEncodingFilter f = new CharacterEncodingFilter();
         f.setEncoding("UTF-8");
         f.setForceEncoding(true);
-
-//        FilterRegistrationBean bean = new FilterRegistrationBean();
-//        bean.addUrlPatterns("/*");
-//        bean.setFilter(f);
-//        bean.setName("encodingFilter");
         return f;
     }
 

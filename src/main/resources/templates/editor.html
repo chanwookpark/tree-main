@@ -2,9 +2,6 @@
 <html>
 <head>
     {>"head" title="Tree Wiki" /}
-    <!-- Codemirror CSS -->
-    <link href="/codemirror/lib/codemirror.css" rel="stylesheet">
-
 </head>
 
 <body>
@@ -13,15 +10,15 @@
 
     <!-- Content -->
     <div class="container">
-        {^docName}
         <form action="/doc/save" method="POST">
+        {^docName}
             <div class="page-header">
                 <input type="text" name="docName" placeholder="제목을 입력하세요!">
             </div>
         {/docName}
         {?docName}
-        <form action="/doc/{docName}/save" method="POST">
             <div>
+                <input type="hidden" name="docName" value="{docName}">
                 <h2>{docName}</h2>
             </div>
         {/docName}
@@ -43,7 +40,7 @@
 
     <!-- Codemirror JS -->
     <script src="/codemirror/lib/codemirror.js"></script>
-    <script src="/codemirror/javascript/javascript.js"></script>
+    <script src="/codemirror/mode/javascript/javascript.js"></script>
 
     <script>
         var editor = CodeMirror.fromTextArea(document.getElementById("content-editor"), {

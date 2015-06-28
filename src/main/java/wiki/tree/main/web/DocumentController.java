@@ -34,7 +34,7 @@ public class DocumentController {
     @Autowired
     private DocumentService service;
 
-    @RequestMapping(value = "/doc/{docName}/edit", method = RequestMethod.GET)
+    @RequestMapping(value = "/doc/edit/{docName}", method = RequestMethod.GET)
     public String viewEditor(@PathVariable String docName, DustModel model) {
         final Document doc = dr.findByName(docName);
         final List<Tag> tagList = tr.findByReference(doc.getId());
@@ -42,6 +42,13 @@ public class DocumentController {
         model.put("docName", docName);
         model.put("document", doc);
         model.put("tag", Tag.createTagString(tagList));
+        return "editor";
+    }
+
+    @RequestMapping(value = "/doc/create", method = RequestMethod.GET)
+    public String viewEditor(DustModel model) {
+        model.put("docName", "");
+        model.put("document", new Document());
         return "editor";
     }
 
@@ -62,13 +69,6 @@ public class DocumentController {
             service.createDocument(createDoc, form.getTag());
         }
         return "redirect:/doc/" + encoding(form.getDocName());
-    }
-
-    @RequestMapping(value = "/doc/create", method = RequestMethod.GET)
-    public String viewEditor(DustModel model) {
-        model.put("docName", "");
-        model.put("document", new Document());
-        return "editor";
     }
 
     @RequestMapping(value = "/doc/{docName}", method = RequestMethod.GET)

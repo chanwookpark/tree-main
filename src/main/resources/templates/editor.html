@@ -29,6 +29,7 @@
         </textarea>
 
         <input type="text" name="tag" value="{tag}" placeholder="공백으로 구분해 입력"><br>
+        <input type="hidden" name="{_csrf.parameterName}" value="{_csrf.token}"/>
         <input class="btn btn-default" type="submit" title="저장">
     </form>
     <div class="doc-meta">

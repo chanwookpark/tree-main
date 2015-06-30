@@ -1,1 +1,5 @@
-Tree Wiki 메인 애플리케이션 
+Tree wiki main application.
+
+This application developed with Spring, Spring-Boot, Spring-Security, MongoDB and R2(dust.js + JDK8 Nashorn) rendering engine.
+
+I still writting this code for me^^. 

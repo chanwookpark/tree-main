@@ -15,15 +15,23 @@ import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticationProcessingFilter;
 import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
+import org.springframework.security.oauth2.client.token.AccessTokenProvider;
+import org.springframework.security.oauth2.client.token.AccessTokenProviderChain;
+import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsAccessTokenProvider;
+import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeAccessTokenProvider;
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
+import org.springframework.security.oauth2.client.token.grant.implicit.ImplicitAccessTokenProvider;
+import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordAccessTokenProvider;
 import org.springframework.security.oauth2.common.AuthenticationScheme;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import wiki.tree.main.security.GoogleTokenService;
+import wiki.tree.main.security.MapClientTokenServices;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,21 +52,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        //구글 로그인 붙이는 중...
-        final OAuth2ClientAuthenticationProcessingFilter filter = new OAuth2ClientAuthenticationProcessingFilter("/googleLogin");
+        String loginUrl = env.getProperty("security-oauth.google.loginUrl");
+
+        final OAuth2ClientAuthenticationProcessingFilter filter = new OAuth2ClientAuthenticationProcessingFilter(loginUrl);
         filter.setRestTemplate(oauthRestTemplate);
         filter.setTokenServices(googleTokenService());
 
         http
-                .authorizeRequests()
+            .authorizeRequests()
                 .antMatchers("/doc/create", "/doc/edit/**", "/doc/save").authenticated()
                 .anyRequest().permitAll()
-                .and()
+            .and()
                 .httpBasic()
-                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/googleLogin"))
-                .and()
+                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(loginUrl))
+            .and()
                 .logout()
-                .and()
+            .and()
+                .anonymous()
+            .and()
                 .addFilterAfter(new OAuth2ClientContextFilter(), ExceptionTranslationFilter.class)
                 .addFilterBefore(filter, FilterSecurityInterceptor.class);
     }
@@ -69,21 +80,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         s.setCheckTokenEndpointUrl(env.getProperty("security-oauth.google.checkPointUrl"));
         s.setClientId(env.getProperty("security-oauth.google.clientId"));
         s.setClientSecret(env.getProperty("security-oauth.google.secret"));
+        s.setTokenName("access_token");
         return s;
     }
-
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.inMemoryAuthentication()
-//                .withUser("user01").password("1234").roles("USER")
-//                .and()
-//                .withUser("user02").password("1234").roles("USER", "ADMIN");
-//    }
 
     @Bean
     @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
     public OAuth2RestTemplate oauthTemplate(OAuth2ClientContext oauth2ClientContext) {
-        return new OAuth2RestTemplate(googleResource(), oauth2ClientContext);
+        final OAuth2RestTemplate template = new OAuth2RestTemplate(googleResource(), oauth2ClientContext);
+        final AccessTokenProviderChain chain = new AccessTokenProviderChain(Arrays.<AccessTokenProvider>asList(
+                new AuthorizationCodeAccessTokenProvider(), new ImplicitAccessTokenProvider(),
+                new ResourceOwnerPasswordAccessTokenProvider(), new ClientCredentialsAccessTokenProvider()));
+        chain.setClientTokenServices(clientTokenServices());
+        template.setAccessTokenProvider(chain);
+        return template;
+    }
+
+    @Bean
+    public MapClientTokenServices clientTokenServices() {
+        return new MapClientTokenServices();
     }
 
     private OAuth2ProtectedResourceDetails googleResource() {

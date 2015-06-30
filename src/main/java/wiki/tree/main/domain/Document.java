@@ -1,5 +1,6 @@
 package wiki.tree.main.domain;
 
+import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -99,5 +100,12 @@ public class Document {
         this.content = updateContent;
         this.updated = updateTime;
         this.updateUser = updateUser;
+    }
+
+    public static Document create(String docName, String content, String user) {
+        final Date now = DateTime.now().toDate();
+        final Document d = new Document(docName, content, now, now, 1);
+        d.setUpdateUser(user);
+        return d;
     }
 }

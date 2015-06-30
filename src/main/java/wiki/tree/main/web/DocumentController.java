@@ -2,6 +2,8 @@ package wiki.tree.main.web;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +18,6 @@ import wiki.tree.main.web.dto.DocumentEditorForm;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,7 +33,7 @@ public class DocumentController {
     private TagRepository tr;
 
     @Autowired
-    private DocumentService service;
+    private DocumentService ds;
 
     @RequestMapping(value = "/doc/edit/{docName}", method = RequestMethod.GET)
     public String viewEditor(@PathVariable String docName, DustModel model) {
@@ -54,19 +55,21 @@ public class DocumentController {
 
     @RequestMapping(value = "/doc/save", method = RequestMethod.POST)
     public String save(DocumentEditorForm form) throws UnsupportedEncodingException {
-        final Document doc = dr.findByName(form.getDocName());
+        Document doc = dr.findByName(form.getDocName());
+
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        final String user = (String) authentication.getPrincipal();
+
         if (doc != null) {
             // update
-            //TODO 이건 세션처리를 어떻게 할까나?
-            doc.update(form.getContent(), DateTime.now().toDate(), "박찬욱");
+            doc.update(form.getContent(), DateTime.now().toDate(), user);
 
-            service.updateDocument(doc, form.getTag());
+            ds.updateDocument(doc, form.getTag());
         } else {
-            //TODO tx 처리
             //create
-            Document createDoc = createDocument(form);
+            Document createDoc = Document.create(form.getDocName(), form.getContent(), user);
 
-            service.createDocument(createDoc, form.getTag());
+            ds.createDocument(createDoc, form.getTag());
         }
         return "redirect:/doc/" + encoding(form.getDocName());
     }
@@ -85,12 +88,4 @@ public class DocumentController {
     private String encoding(String docName) throws UnsupportedEncodingException {
         return URLEncoder.encode(docName, "UTF-8");
     }
-
-    private Document createDocument(DocumentEditorForm form) {
-        final Date now = DateTime.now().toDate();
-        final Document d = new Document(form.getDocName(), form.getContent(), now, now, 1);
-        d.setUpdateUser("박찬욱");
-        return d;
-    }
-
 }

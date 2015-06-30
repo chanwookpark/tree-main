@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import r2.dustjs.spring.DustModel;
 import wiki.tree.main.domain.Document;
 import wiki.tree.main.repository.DocumentRepository;
+import wiki.tree.main.service.UserService;
 
 /**
  * @author chanwook
@@ -18,6 +19,9 @@ public class NavigationPageController {
     @Autowired
     private DocumentRepository r;
 
+    @Autowired
+    private UserService us;
+
     @RequestMapping("/home")
     public String viewHome() {
         return "home";
@@ -26,7 +30,10 @@ public class NavigationPageController {
     @RequestMapping("/post")
     public String post(Pageable pageRequest, DustModel model) {
         final Page<Document> page = r.findAll(pageRequest);
+        //TODO 개선하기..
+        us.replaceUserIdToName(page.getContent());
         model.put("page", page);
         return "post";
     }
+
 }

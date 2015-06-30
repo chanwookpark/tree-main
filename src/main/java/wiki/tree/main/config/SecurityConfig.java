@@ -27,6 +27,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import wiki.tree.main.security.GoogleAccessTokenConverter;
 import wiki.tree.main.security.GoogleTokenService;
 import wiki.tree.main.security.MapClientTokenServices;
 
@@ -52,26 +53,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        String loginUrl = env.getProperty("security-oauth.google.loginUrl");
-
-        final OAuth2ClientAuthenticationProcessingFilter filter = new OAuth2ClientAuthenticationProcessingFilter(loginUrl);
-        filter.setRestTemplate(oauthRestTemplate);
-        filter.setTokenServices(googleTokenService());
-
         http
             .authorizeRequests()
                 .antMatchers("/doc/create", "/doc/edit/**", "/doc/save").authenticated()
                 .anyRequest().permitAll()
             .and()
                 .httpBasic()
-                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(loginUrl))
+                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(env.getProperty("security-oauth.google.loginUrl")))
             .and()
                 .logout()
             .and()
                 .anonymous()
             .and()
                 .addFilterAfter(new OAuth2ClientContextFilter(), ExceptionTranslationFilter.class)
-                .addFilterBefore(filter, FilterSecurityInterceptor.class);
+                .addFilterBefore(getOAuth2ProcessingFilter(), FilterSecurityInterceptor.class);
+    }
+
+    private OAuth2ClientAuthenticationProcessingFilter getOAuth2ProcessingFilter() {
+        final OAuth2ClientAuthenticationProcessingFilter filter =
+                new OAuth2ClientAuthenticationProcessingFilter(env.getProperty("security-oauth.google.loginUrl"));
+        filter.setRestTemplate(oauthRestTemplate);
+        filter.setTokenServices(googleTokenService());
+        return filter;
     }
 
     @Bean
@@ -80,7 +83,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         s.setCheckTokenEndpointUrl(env.getProperty("security-oauth.google.checkPointUrl"));
         s.setClientId(env.getProperty("security-oauth.google.clientId"));
         s.setClientSecret(env.getProperty("security-oauth.google.secret"));
-        s.setTokenName("access_token");
+        s.setTokenName(env.getProperty("security-oauth.google.tokenName"));
+        s.setAccessTokenConverter(new GoogleAccessTokenConverter());
         return s;
     }
 
@@ -108,7 +112,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         resource.setClientSecret(env.getProperty("security-oauth.google.secret"));
         resource.setAccessTokenUri(env.getProperty("security-oauth.google.accessTokenUri"));
         resource.setUserAuthorizationUri(env.getProperty("security-oauth.google.authUri"));
-//        resource.setTokenName(env.getProperty("security-oauth.google.tokenName"));
+        resource.setTokenName(env.getProperty("security-oauth.google.tokenName"));
         resource.setScope(createScope(env.getProperty("security-oauth.google.scope")));
         resource.setPreEstablishedRedirectUri(env.getProperty("security-oauth.google.redirectUrl"));
         resource.setUseCurrentUri(false);

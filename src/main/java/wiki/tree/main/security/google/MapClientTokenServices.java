@@ -1,4 +1,4 @@
-package wiki.tree.main.security;
+package wiki.tree.main.security.google;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;

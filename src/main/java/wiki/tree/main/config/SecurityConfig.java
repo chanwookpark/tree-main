@@ -27,9 +27,9 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
-import wiki.tree.main.security.GoogleAccessTokenConverter;
-import wiki.tree.main.security.GoogleTokenService;
-import wiki.tree.main.security.MapClientTokenServices;
+import wiki.tree.main.security.google.GoogleAccessTokenConverter;
+import wiki.tree.main.security.google.GoogleTokenService;
+import wiki.tree.main.security.google.MapClientTokenServices;
 
 import java.util.ArrayList;
 import java.util.Arrays;

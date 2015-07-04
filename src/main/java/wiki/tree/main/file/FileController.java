@@ -52,7 +52,7 @@ public class FileController {
         DbxClient dbxClient = getClientApi(session);
         if (dbxClient == null) {
             // dropbox 로그인하러 가기
-            return "redirect:/security/dropbox/connect";
+            return "redirect:/security/dropbox/connect?callback=/doc/" + docId + "/file";
         }
         fs.saveFile(docId, dbxClient, fileSource);
 

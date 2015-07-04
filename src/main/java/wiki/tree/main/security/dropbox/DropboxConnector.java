@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,8 +16,6 @@ import java.io.IOException;
 import java.util.Locale;
 
 import static wiki.tree.main.security.dropbox.DropboxConstants.*;
-
-;
 
 /**
  * @author chanwook
@@ -30,7 +29,7 @@ public class DropboxConnector {
     Environment env;
 
     @RequestMapping("/security/dropbox/connect")
-    public void connect(HttpSession session, HttpServletResponse response) throws IOException {
+    public void connect(HttpServletRequest request, HttpSession session, HttpServletResponse response) throws IOException {
         final String APP_KEY = env.getProperty("security-oauth.dropbox.appkey");
         final String APP_SECRET = env.getProperty("security-oauth.dropbox.secret");
         final String CLIENT_ID = env.getProperty("security-oauth.dropbox.clientId");
@@ -45,6 +44,11 @@ public class DropboxConnector {
         session.setAttribute(SESSION_WEB_AUTH, webAuth);
         session.setAttribute(SESSION_REQUEST_CONFIG, config);
         session.setAttribute(SESSION_SESSION_STORE, sessionStore);
+
+        final String callback = request.getParameter("callback");
+        if (StringUtils.hasText(callback)) {
+            session.setAttribute(SESSION_CALLBACK, callback);
+        }
 
         final String authorizationUrl = webAuth.start();
 
@@ -94,6 +98,9 @@ public class DropboxConnector {
             return "/error";
         }
 
+        if (session.getAttribute(SESSION_CALLBACK) != null) {
+            return "redirect:" + session.getAttribute(SESSION_CALLBACK);
+        }
         return "redirect:/home";
     }
 }

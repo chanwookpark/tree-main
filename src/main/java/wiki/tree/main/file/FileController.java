@@ -68,10 +68,13 @@ public class FileController {
         DbxClient dbxClient = getClientApi(session);
         if (dbxClient == null) {
             // dropbox 로그인하러 가기
-            return;
+            response.sendRedirect("/security/dropbox/connect");
         }
+        response.setContentType(file.getFormat());
+        response.setContentLengthLong(file.getSize());
 
         fs.getFile(dbxClient, file, response.getOutputStream());
+
     }
 
     private DbxClient getClientApi(HttpSession session) {

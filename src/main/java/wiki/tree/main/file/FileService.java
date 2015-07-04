@@ -1,6 +1,7 @@
 package wiki.tree.main.file;
 
 import com.dropbox.core.DbxClient;
+import com.dropbox.core.DbxEntry;
 import com.dropbox.core.DbxException;
 import org.springframework.web.multipart.MultipartFile;
 

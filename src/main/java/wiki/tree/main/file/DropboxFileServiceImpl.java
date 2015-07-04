@@ -11,15 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
 import java.io.IOException;
 
 /**
  * @author chanwook
  */
 @Service
-public class DropboxFileService implements FileService {
+public class DropboxFileServiceImpl implements FileService {
 
-    private final Logger logger = LoggerFactory.getLogger(DropboxFileService.class);
+    private final Logger logger = LoggerFactory.getLogger(DropboxFileServiceImpl.class);
 
     @Autowired
     private FileRepository fr;
@@ -33,6 +34,7 @@ public class DropboxFileService implements FileService {
                 dbxClient.uploadFile(file.uploadPath(), DbxWriteMode.add(), file.getSize(), fileSource.getInputStream());
 
         file.setUrl(uploadFile.path);
+        file.setRevision(uploadFile.rev);
 
         fr.save(file);
 
@@ -40,6 +42,11 @@ public class DropboxFileService implements FileService {
             logger.debug("Upload file(Meta): " + file);
             logger.debug("Upload file(Dropbox): " + uploadFile);
         }
+    }
+
+    @Override
+    public void getFile(DbxClient dbxClient, File file, ServletOutputStream outputStream) throws IOException, DbxException {
+        dbxClient.getFile(file.getUrl(), file.getRevision(), outputStream);
     }
 
     private File createFileMeta(String docId, MultipartFile fileSource) {

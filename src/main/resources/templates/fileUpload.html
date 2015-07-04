@@ -12,22 +12,26 @@
 <div class="container">
 
     <div>
-        <h2>업로드한 파일 목록 </h2>
+        <h2>업로드한 파일 목록</h2>
         <table class="table table-hover">
             <thead>
             <tr>
-                <td class="col-xs-2"></td>
                 <td class="col-xs-6"></td>
+                <td class="col-xs-6"></td>
+                <td class="col-xs-2"></td>
             </tr>
             </thead>
             <tbody>
             {#fileList}
             <tr>
                 <td>
-                    <a href="{url}">{originalFileName}</a>
+                    <a href="/file/{id}">{originalFileName}</a>
                 </td>
                 <td>
                     {format}, {size} ({updated})
+                </td>
+                <td>
+                    <a class="btn btn-info btn-xs" href="#" role="button">REMOVE</a>
                 </td>
             </tr>
             {/fileList}
@@ -36,10 +40,11 @@
     </div>
 
     <div>
-    <form action="/doc/{docId}/file" method="POST" enctype="multipart/form-data">
+    <form action="/file/upload" method="POST" enctype="multipart/form-data">
 
         <input type="file" name="uploadFile" >
 
+        <input type="hidden" name="docId" value="{docId}"/>
         <input type="hidden" name="{_csrf.parameterName}" value="{_csrf.token}"/>
         <input class="btn btn-default" type="submit" value="UPLOAD">
     </form>

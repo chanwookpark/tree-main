@@ -28,6 +28,7 @@ public class File {
     private long size;
 
     private String reference;
+    private String revision;
 
 
     public String getId() {
@@ -94,17 +95,26 @@ public class File {
         return originalFileName;
     }
 
+    public void setRevision(String revision) {
+        this.revision = revision;
+    }
+
+    public String getRevision() {
+        return revision;
+    }
+
     @Override
     public String toString() {
         return "File{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
+                ", originalFileName='" + originalFileName + '\'' +
                 ", url='" + url + '\'' +
                 ", format='" + format + '\'' +
                 ", updated=" + updated +
                 ", size=" + size +
                 ", reference='" + reference + '\'' +
-                ", originalFileName='" + originalFileName + '\'' +
+                ", revision='" + revision + '\'' +
                 '}';
     }
 

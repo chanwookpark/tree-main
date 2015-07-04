@@ -1,4 +1,4 @@
-package wiki.tree.main.web;
+package wiki.tree.main.document;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +9,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import r2.dustjs.spring.DustModel;
-import wiki.tree.main.domain.Document;
-import wiki.tree.main.domain.Tag;
-import wiki.tree.main.repository.DocumentRepository;
-import wiki.tree.main.repository.TagRepository;
-import wiki.tree.main.service.DocumentService;
-import wiki.tree.main.web.dto.DocumentEditorForm;
+import wiki.tree.main.document.domain.Document;
+import wiki.tree.main.document.domain.Tag;
+import wiki.tree.main.document.repository.DocumentRepository;
+import wiki.tree.main.document.repository.TagRepository;
+import wiki.tree.main.document.service.DocumentService;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

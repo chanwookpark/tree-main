@@ -1,4 +1,4 @@
-package wiki.tree.main.domain;
+package wiki.tree.main.document.domain;
 
 import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;

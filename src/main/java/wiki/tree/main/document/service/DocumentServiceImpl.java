@@ -1,18 +1,18 @@
-package wiki.tree.main.service;
+package wiki.tree.main.document.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import wiki.tree.main.domain.Document;
-import wiki.tree.main.domain.Tag;
-import wiki.tree.main.repository.DocumentRepository;
-import wiki.tree.main.repository.TagRepository;
+import wiki.tree.main.document.domain.Document;
+import wiki.tree.main.document.domain.Tag;
+import wiki.tree.main.document.repository.DocumentRepository;
+import wiki.tree.main.document.repository.TagRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static wiki.tree.main.domain.Tag.*;
+import static wiki.tree.main.document.domain.Tag.*;
 
 /**
  * @author chanwook

@@ -1,7 +1,7 @@
-package wiki.tree.main.service;
+package wiki.tree.main.document.service;
 
 import org.springframework.stereotype.Service;
-import wiki.tree.main.domain.Document;
+import wiki.tree.main.document.domain.Document;
 
 import java.util.List;
 

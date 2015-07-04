@@ -1,7 +1,7 @@
-package wiki.tree.main.repository;
+package wiki.tree.main.document.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
-import wiki.tree.main.domain.Document;
+import wiki.tree.main.document.domain.Document;
 
 /**
  * @author chanwook

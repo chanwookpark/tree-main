@@ -1,6 +1,6 @@
-package wiki.tree.main.service;
+package wiki.tree.main.document.service;
 
-import wiki.tree.main.domain.Document;
+import wiki.tree.main.document.domain.Document;
 
 /**
  * @author chanwook

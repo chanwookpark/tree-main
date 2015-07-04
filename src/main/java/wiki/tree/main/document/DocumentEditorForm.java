@@ -1,4 +1,4 @@
-package wiki.tree.main.web.dto;
+package wiki.tree.main.document;
 
 /**
  * @author chanwook

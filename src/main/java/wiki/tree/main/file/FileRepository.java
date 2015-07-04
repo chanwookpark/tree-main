@@ -1,7 +1,7 @@
-package wiki.tree.main.repository;
+package wiki.tree.main.file;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
-import wiki.tree.main.domain.File;
+import wiki.tree.main.file.File;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package wiki.tree.main.domain;
+package wiki.tree.main.file;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -106,5 +106,9 @@ public class File {
                 ", reference='" + reference + '\'' +
                 ", originalFileName='" + originalFileName + '\'' +
                 '}';
+    }
+
+    public String uploadPath() {
+        return "/" + getReference() + "/" + getOriginalFileName();
     }
 }

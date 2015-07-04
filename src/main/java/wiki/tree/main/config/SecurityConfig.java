@@ -55,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers("/doc/create", "/doc/edit/**", "/doc/save").authenticated()
+                .antMatchers("/doc/create", "/doc/edit/**", "/doc/save", "/doc/**/file").authenticated()
                 .anyRequest().permitAll()
             .and()
                 .httpBasic()

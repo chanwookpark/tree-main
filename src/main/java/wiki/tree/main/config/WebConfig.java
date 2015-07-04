@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static r2.dustjs.spring.DustModel.*;
+
 /**
  * Web 환경설정 JavaConfig
  *
@@ -41,7 +43,7 @@ public class WebConfig extends WebMvcAutoConfiguration.WebMvcAutoConfigurationAd
         viewResolver.setViewClass(DustjsView.class);
         viewResolver.setCache(false);
         final HashMap<String, Object> attributes = new HashMap<String, Object>();
-        attributes.put(DustModel.MAPPER_KEY, new DustModelMapper() {
+        attributes.put(MAPPER_KEY, new DustModelMapper() {
             @Override
             public void bind(DustModel dm, Map<String, Object> mergedOutputModel, HttpServletRequest request) {
                 final Object csrf = request.getAttribute("_csrf");
@@ -50,6 +52,7 @@ public class WebConfig extends WebMvcAutoConfiguration.WebMvcAutoConfigurationAd
                 }
             }
         });
+
         viewResolver.setAttributesMap(attributes);
         registry.viewResolver(viewResolver);
     }

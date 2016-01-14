@@ -5,10 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import r2.dustjs.spring.DustModel;
 import wiki.tree.main.document.domain.Document;
 import wiki.tree.main.document.domain.Tag;
 import wiki.tree.main.document.repository.DocumentRepository;
@@ -35,7 +35,7 @@ public class DocumentController {
     private DocumentService ds;
 
     @RequestMapping(value = "/doc/edit/{docName}", method = RequestMethod.GET)
-    public String viewEditor(@PathVariable String docName, DustModel model) {
+    public String viewEditor(@PathVariable String docName, ModelMap model) {
         final Document doc = dr.findByName(docName);
         final List<Tag> tagList = tr.findByReference(doc.getId());
 
@@ -46,7 +46,7 @@ public class DocumentController {
     }
 
     @RequestMapping(value = "/doc/create", method = RequestMethod.GET)
-    public String viewEditor(DustModel model) {
+    public String viewEditor(ModelMap model) {
         model.put("docName", "");
         model.put("document", new Document());
         return "editor";
@@ -74,7 +74,7 @@ public class DocumentController {
     }
 
     @RequestMapping(value = "/doc/{docName}", method = RequestMethod.GET)
-    public String view(@PathVariable String docName, DustModel model) {
+    public String view(@PathVariable String docName, ModelMap model) {
         final Document doc = dr.findByName(docName);
         final List<Tag> tag = tr.findByReference(doc.getId());
 

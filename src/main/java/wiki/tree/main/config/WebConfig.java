@@ -3,22 +3,19 @@ package wiki.tree.main.config;
 import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.web.filter.CharacterEncodingFilter;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import r2.dustjs.spring.DustModel;
-import r2.dustjs.spring.DustModelMapper;
-import r2.dustjs.spring.DustRenderModelHandlerMethodArgumentResolver;
-import r2.dustjs.spring.DustjsView;
+import org.springframework.web.servlet.view.script.ScriptTemplateConfigurer;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import static r2.dustjs.spring.DustModel.*;
 
 /**
  * Web 환경설정 JavaConfig
@@ -30,31 +27,46 @@ import static r2.dustjs.spring.DustModel.*;
 public class WebConfig extends WebMvcAutoConfiguration.WebMvcAutoConfigurationAdapter {
 
     @Override
-    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        argumentResolvers.add(new DustRenderModelHandlerMethodArgumentResolver());
+    public void configureViewResolvers(ViewResolverRegistry registry) {
+        registry.scriptTemplate().prefix("/templates/").suffix(".html");
+    }
+
+    @Bean
+    public ScriptTemplateConfigurer scriptTemplateConfigurer() throws IOException {
+        final ScriptTemplateConfigurer configurer = new ScriptTemplateConfigurer();
+        configurer.setRenderFunction("render");
+        configurer.setSharedEngine(true);
+
+        ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
+        configurer.setEngine(engine);
+        addScripts(configurer);
+
+        return configurer;
+    }
+
+    private void addScripts(ScriptTemplateConfigurer configurer) throws IOException {
+        List<String> scripts = new ArrayList<>();
+        scripts.add("/static/template/js/dust.js");
+        scripts.add("/static/template/js/polyfill.js");
+        scripts.add("/META-INF/resources/webjars/dustjs-linkedin/2.6.1/dust-full.js");
+
+        // TODO we needs refactoring if add STV.setScripts("folder")
+        final ClassPathResource dir = new ClassPathResource("/templates/compiled");
+        for (File f : dir.getFile().listFiles()) {
+            scripts.add("/templates/compiled/" + f.getName());
+        }
+        configurer.setScripts(scripts.toArray(new String[scripts.size()]));
     }
 
     @Override
-    public void configureViewResolvers(ViewResolverRegistry registry) {
-        //TODO 우선 동작하게..
-        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-        viewResolver.setPrefix("/templates/");
-        viewResolver.setSuffix(".html");
-        viewResolver.setViewClass(DustjsView.class);
-        viewResolver.setCache(false);
-        final HashMap<String, Object> attributes = new HashMap<String, Object>();
-        attributes.put(MAPPER_KEY, new DustModelMapper() {
-            @Override
-            public void bind(DustModel dm, Map<String, Object> mergedOutputModel, HttpServletRequest request) {
-                final Object csrf = request.getAttribute("_csrf");
-                if (csrf != null) {
-                    dm.put("_csrf", csrf);
-                }
-            }
-        });
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        if (!registry.hasMappingForPattern("/templates/**")) {
+            registry.addResourceHandler("/templates/**").addResourceLocations("classpath:/templates/");
+        }
 
-        viewResolver.setAttributesMap(attributes);
-        registry.viewResolver(viewResolver);
+        if (!registry.hasMappingForPattern("/static/**")) {
+            registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
+        }
     }
 
     @Bean

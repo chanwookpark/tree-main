@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import r2.dustjs.spring.DustModel;
 import wiki.tree.main.security.dropbox.DropboxConstants;
 
 import javax.servlet.http.HttpServletResponse;
@@ -35,7 +35,7 @@ public class FileController {
     private Environment env;
 
     @RequestMapping(value = "/doc/{docId}/file", method = RequestMethod.GET)
-    public String view(@PathVariable String docId, DustModel model) {
+    public String view(@PathVariable String docId, ModelMap model) {
         List<File> fileList = fr.findByReference(docId);
 
         model.put("docId", docId);

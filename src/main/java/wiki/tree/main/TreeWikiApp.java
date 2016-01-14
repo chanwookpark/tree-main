@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @SpringBootApplication
 @Controller
-public class TreeWikiMainApp {
+public class TreeWikiApp {
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(TreeWikiMainApp.class, args);
+        SpringApplication.run(TreeWikiApp.class, args);
     }
 
     @RequestMapping("/check")

@@ -5,7 +5,7 @@
 </head>
 
 <body>
-    {>"navbar" /}
+    {> "navbar"/}
 
     <!-- Content -->
     <div class="container">
@@ -21,7 +21,7 @@
                 </tr>
             </thead>
             <tbody>
-                {#page.content}
+                {#postList}
                 <tr>
                     <td>
                         <small>{updated}</small>
@@ -31,7 +31,7 @@
                         <a href="/doc/{name}">{name}</a>
                     </td>
                 </tr>
-                {/page.content}
+                {/postList}
             </tbody>
         </table>
         <div>

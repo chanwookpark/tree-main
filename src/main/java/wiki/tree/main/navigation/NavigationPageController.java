@@ -32,7 +32,7 @@ public class NavigationPageController {
         final Page<Document> page = r.findAll(pageRequest);
         //TODO 개선하기..
         us.replaceUserIdToName(page.getContent());
-        model.put("page", page);
+        model.put("postList", page.getContent());
         return "post";
     }
 

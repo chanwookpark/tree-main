@@ -8,11 +8,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import wiki.tree.document.domain.Document;
-import wiki.tree.document.converter.AsciidoctorDocumentConverter;
 import wiki.tree.document.domain.Tag;
 import wiki.tree.document.repository.DocumentRepository;
 import wiki.tree.document.repository.TagRepository;
@@ -42,12 +42,27 @@ public class DocumentController {
     @RequestMapping(value = "/doc/edit/{docName}", method = RequestMethod.GET)
     public String viewEditor(@PathVariable String docName, ModelMap model) {
         final Document doc = dr.findByName(docName);
+
+        if (!isEditableUser(doc)) {
+            throw new RuntimeException("Not permitted update to document!");
+        }
+
         final List<Tag> tagList = tr.findByReference(doc.getId());
 
         model.put("docName", docName);
         model.put("document", doc);
         model.put("tag", Tag.createTagString(tagList));
         return "editor";
+    }
+
+    private boolean isEditableUser(Document doc) {
+        final String userName = getUserName();
+        if (StringUtils.hasText(userName)
+                && StringUtils.hasText(doc.getUpdateUser())
+                && userName.equals(doc.getUpdateUser())) {
+            return true;
+        }
+        return false;
     }
 
     @RequestMapping(value = "/doc/create", method = RequestMethod.GET)
@@ -60,9 +75,7 @@ public class DocumentController {
     @RequestMapping(value = "/doc/save", method = RequestMethod.POST)
     public String save(DocumentEditorForm form) throws UnsupportedEncodingException {
         Document doc = dr.findByName(form.getDocName());
-
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        final String user = (String) authentication.getPrincipal();
+        final String user = getUserName();
 
         if (doc != null) {
             // update
@@ -78,18 +91,9 @@ public class DocumentController {
         return "redirect:/doc/" + encoding(form.getDocName());
     }
 
-    @RequestMapping(value = "/doc/{docName}", method = RequestMethod.GET)
-    public String view(@PathVariable String docName, ModelMap model) {
-        final Document doc = dr.findByName(docName);
-        String html = new AsciidoctorDocumentConverter(doc).convert();
-
-        final List<Tag> tag = tr.findByReference(doc.getId());
-
-        model.put("docName", docName);
-        model.put("document", doc);
-        model.put("tag", tag);
-        model.put("_html", html);
-        return "view";
+    private String getUserName() {
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (String) authentication.getPrincipal();
     }
 
     private String encoding(String docName) throws UnsupportedEncodingException {

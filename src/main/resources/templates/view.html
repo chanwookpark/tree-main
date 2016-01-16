@@ -10,48 +10,29 @@
 
 <!-- Content -->
 <div class="container">
-    <article itemscope itemtype="http://schema.org/Article">
+    <div class="page-header">
         {#document}
-        <header>
-            <div class="page-header">
-                <h1>{name}</h1>
-            </div>
-            <div>
-                <table>
-                    <tr>
-                        <td>생성: {created}</td>
-                        <td>(rev.{revision})</td>
-                        <td colspan="2">
-                            <a class="btn btn-primary" href="/doc/edit/{name}" role="button">EDIT</a>
-                            <a class="btn btn-primary" href="/doc/{id}/file" role="button">FILE</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>갱신: {updated}</td>
-                        <td></td>
-                    </tr>
-                </table>
-            </div>
-        </header>
+        <h1>{name}</h1>
+        생성: {created} ({revision} rev) 갱신: {updated} &nbsp;
         {/document}
-
-        <section>
-            {_html|s}
-        </section>
-
-        {#document}
-        <section>
-            <p>
-                {#tag}
-                <a href="/tag/{value}">{value}</a>&nbsp;
-                {/tag}
-            </p>
-        </section>
-        {/document}
-    </article>
-    <div class="doc-meta">
-        <p>블라블라...</p>
+        <a href="/doc/edit/{name}" role="button">EDIT</a> &nbsp;
+        <a href="/doc/{id}/file" role="button">FILE</a>
     </div>
+
+    <div id="page-body">
+        {_html|s}
+    </div>
+
+    <div id="page-meta">
+        {#document}
+        <p>
+            {#tag}
+            <a href="/tag/{value}">{value}</a>&nbsp;
+            {/tag}
+        </p>
+        {/document}
+    </div>
+
 </div>
 <!-- Content -->
 

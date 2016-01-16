@@ -18,14 +18,12 @@ function render(template, model, url) {
     // Java object to JavaScript object
     var jsonObject = convertToJsonObject(model);
 
-    /*
     console.log(
         "'" + url + "' template is ready to rendering!\n" +
         "=============================================================\n"
         + template + "\n"
         + model + "\n"
         + "=============================================================");
-    */
 
     // Render
     // Dust is basically asynchronously then this code has potentially issue with synchronous..
@@ -37,6 +35,9 @@ function render(template, model, url) {
             res = data;
         }
     });
+
+    console.log("HTML to Render ========================\n"+res+"\n========================");
+
     return res;
 }
 
@@ -52,3 +53,13 @@ function convertToJsonObject(model) {
     }
     return o;
 }
+
+/*
+dust.helpers.renderingDocument = function (chunk, context, bodies, params) {
+    console.log("chunk: " + chunk);
+    console.log("context: " + context);
+    console.log("bodies: " + bodies);
+    console.log("params: " + params);
+
+};
+*/

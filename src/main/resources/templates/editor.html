@@ -28,8 +28,9 @@
             {document.content}
         </textarea>
 
-        <input type="text" name="tag" value="{tag}" placeholder="공백으로 구분해 입력"><br>
-        <input type="hidden" name="{_csrf.parameterName}" value="{_csrf.token}"/>
+        <input type="text" name="tag" value="{tag}" placeholder="공백으로 구분해 입력"> <br/>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> <br/>
+
         <input class="btn btn-default" type="submit" value="저장">
     </form>
     <div class="doc-meta">
@@ -42,16 +43,5 @@
 
 {>"includejs" /}
 
-<!-- Codemirror JS -->
-<script src="/codemirror/lib/codemirror.js"></script>
-<script src="/codemirror/mode/javascript/javascript.js"></script>
-
-<script>
-    var editor = CodeMirror.fromTextArea(document.getElementById("content-editor"), {
-        lineNumbers: true,
-        mode: "text/html",
-        matchBrackets: true
-    });
-</script>
 </body>
 </html>

@@ -2,7 +2,6 @@
 <html>
 <head>
     {>"head" title="Tree Wiki" /}
-
 </head>
 
 <body>
@@ -11,8 +10,8 @@
 
 <!-- Content -->
 <div class="container">
-    {#document}
     <article itemscope itemtype="http://schema.org/Article">
+        {#document}
         <header>
             <div class="page-header">
                 <h1>{name}</h1>
@@ -34,9 +33,13 @@
                 </table>
             </div>
         </header>
+        {/document}
+
         <section>
-            <p>{content}</p>
+            {_html|s}
         </section>
+
+        {#document}
         <section>
             <p>
                 {#tag}
@@ -44,8 +47,8 @@
                 {/tag}
             </p>
         </section>
+        {/document}
     </article>
-    {/document}
     <div class="doc-meta">
         <p>블라블라...</p>
     </div>
@@ -55,17 +58,5 @@
 {>"footer" /}
 
 {>"includejs" /}
-
-<!-- Codemirror JS -->
-<script src="/codemirror/lib/codemirror.js"></script>
-<script src="/codemirror/javascript/javascript.js"></script>
-
-<script>
-    var editor = CodeMirror.fromTextArea(document.getElementById("content-editor"), {
-        lineNumbers: true,
-        mode: "text/html",
-        matchBrackets: true
-    });
-</script>
 </body>
 </html>

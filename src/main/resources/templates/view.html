@@ -6,14 +6,17 @@
 
 <body>
 
-{>"navbar" /}
 
 <!-- Content -->
 <div class="container">
+
+    <a href="/home">&lt;&lt;HOME</a>
+    <a href="history.back();">&lt;BACK</a> &nbsp;
+
     <div class="page-header">
         {#document}
         <h1>{name}</h1>
-        생성: {created} ({revision} rev) 갱신: {updated} &nbsp;
+        생성: {created} (rev: {revision}) 갱신: {updated} &nbsp;
         {/document}
         <a href="/doc/edit/{name}" role="button">EDIT</a> &nbsp;
         <a href="/doc/{id}/file" role="button">FILE</a>

@@ -13,6 +13,7 @@ function render(template, model, url) {
     if (templates[url] === undefined) {
         var compiled = dust.compile(template, url); // compile
         dust.loadSource(compiled); // load
+        templates[url] = "Y";
     }
 
     // Java object to JavaScript object
@@ -53,13 +54,3 @@ function convertToJsonObject(model) {
     }
     return o;
 }
-
-/*
-dust.helpers.renderingDocument = function (chunk, context, bodies, params) {
-    console.log("chunk: " + chunk);
-    console.log("context: " + context);
-    console.log("bodies: " + bodies);
-    console.log("params: " + params);
-
-};
-*/

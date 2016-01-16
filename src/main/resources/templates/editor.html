@@ -13,29 +13,27 @@
     <form action="/doc/save" method="POST">
         {^docName}
         <div class="page-header">
-            <input type="text" name="docName" placeholder="제목을 입력하세요!">
+            <input type="text" name="docName" placeholder="제목을 입력하세요!" size="100">
         </div>
         {/docName}
         {?docName}
         <div>
             <input type="hidden" name="docName" value="{docName}">
-
             <h2>{docName}</h2>
         </div>
         {/docName}
 
-        <textarea id="content-editor" name="content">
+        <p>
+        <textarea id="content-editor" name="content" cols="110" rows="20">
             {document.content}
         </textarea>
+        </p>
 
-        <input type="text" name="tag" value="{tag}" placeholder="공백으로 구분해 입력"> <br/>
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> <br/>
+        <input type="text" name="tag" value="{tag}" placeholder="공백으로 구분해 입력" size="50"> <br/>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> <br/>
 
         <input class="btn btn-default" type="submit" value="저장">
     </form>
-    <div class="doc-meta">
-        <p>블라블라...</p>
-    </div>
 </div>
 <!-- Content -->
 

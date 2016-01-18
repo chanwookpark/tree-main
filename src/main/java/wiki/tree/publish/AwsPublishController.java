@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import wiki.tree.document.converter.AsciidoctorDocumentConverter;
 import wiki.tree.document.domain.Document;
 import wiki.tree.document.repository.DocumentRepository;
 
@@ -31,6 +32,9 @@ public class AwsPublishController {
     @RequestMapping(value = "/publish/aws/s3/{docName}", method = RequestMethod.GET)
     public ResponseEntity publishToS3(@PathVariable String docName) {
         Document doc = dr.findByName(docName);
+
+        final String convertedHtml = new AsciidoctorDocumentConverter(doc).convert();
+        doc.setContent(convertedHtml); // change to converted HTML
 
         try {
             s3Template.publish(doc);

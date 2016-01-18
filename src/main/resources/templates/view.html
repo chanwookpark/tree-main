@@ -2,6 +2,17 @@
 <html>
 <head>
     {>"head" title="Tree Wiki" /}
+
+    <script type="text/javascript">
+        function publishToS3(docName) {
+            $.ajax({
+                url: "/publish/aws/s3/" + docName,
+                success: function (data,textStatus,jqXHR) {
+                    alert("result:" + textStatus);
+                }
+            });
+        }
+    </script>
 </head>
 
 <body>
@@ -16,7 +27,8 @@
         생성: {created} (rev: {revision}) 갱신: {updated} &nbsp;
         {/document}
         <a href="/doc/edit/{name}" role="button">EDIT</a> &nbsp;
-        <a href="/doc/{id}/file" role="button">FILE</a>
+        <a href="/doc/{id}/file" role="button">FILE</a>&nbsp;
+        <a role="button" onclick="publishToS3('{name}')">PUBLISH(S3)</a>
     </div>
 
     <div id="page-body">

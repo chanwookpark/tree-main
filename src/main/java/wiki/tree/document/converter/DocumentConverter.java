@@ -7,4 +7,5 @@ public interface DocumentConverter {
 
     String convert();
 
+    String convert(boolean containsHeaderFooter);
 }

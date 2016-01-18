@@ -33,7 +33,8 @@ public class AwsPublishController {
     public ResponseEntity publishToS3(@PathVariable String docName) {
         Document doc = dr.findByName(docName);
 
-        final String convertedHtml = new AsciidoctorDocumentConverter(doc).convert();
+        //TODO Document 정보로 문서 헤더 꾸미기.
+        final String convertedHtml = new AsciidoctorDocumentConverter(doc).convert(true);
         doc.setContent(convertedHtml); // change to converted HTML
 
         try {

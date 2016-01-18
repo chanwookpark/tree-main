@@ -1,11 +1,10 @@
 package wiki.tree.document.converter;
 
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.Options;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import wiki.tree.document.domain.Document;
-
-import java.util.HashMap;
 
 /**
  * @author chanwook
@@ -22,17 +21,20 @@ public class AsciidoctorDocumentConverter implements DocumentConverter {
 
     @Override
     public String convert() {
-        final Asciidoctor asciidoctor = Asciidoctor.Factory.create();
-        final HashMap<String, Object> attributes = new HashMap<>();
-        attributes.put("doctype", "book");
+        return convert(false);
+    }
 
-        final HashMap<String, Object> options = new HashMap<>();
-        options.put("attributes", attributes);
+    @Override
+    public String convert(boolean containsHeaderFooter) {
+        final Asciidoctor asciidoctor = Asciidoctor.Factory.create();
+
+        Options options = new Options();
+        options.setHeaderFooter(containsHeaderFooter);
 
         final String html = asciidoctor.convert(doc.getContent(), options);
 
         if (logger.isDebugEnabled()) {
-            logger.debug("\n[Source HTML]\n" + doc.getContent() + "\n[Converted HTML]\n" + html);
+            logger.debug("\n>> Source HTML\n" + doc.getContent() + "\n>>Converted HTML\n" + html);
         }
 
         return html;

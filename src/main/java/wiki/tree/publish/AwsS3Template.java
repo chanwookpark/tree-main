@@ -40,7 +40,7 @@ public class AwsS3Template {
     }
 
     private String getUploadPath(Document doc) {
-        return "s3://treewiki/" + doc.getName();
+        return "s3://treewiki/" + doc.getName() + ".html";
     }
 
     public ResourceLoader getResourceLoader() {

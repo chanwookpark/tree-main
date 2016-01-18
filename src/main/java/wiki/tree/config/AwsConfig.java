@@ -1,10 +1,10 @@
 package wiki.tree.config;
 
+import com.amazonaws.services.s3.AmazonS3;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.io.ResourceLoader;
 import wiki.tree.publish.AwsS3Template;
 
 /**
@@ -16,7 +16,7 @@ import wiki.tree.publish.AwsS3Template;
 public class AwsConfig {
 
     @Bean
-    public AwsS3Template s3Template(ResourceLoader resourceLoader) {
-        return new AwsS3Template(resourceLoader);
+    public AwsS3Template s3Template(AmazonS3 s3) {
+        return new AwsS3Template(s3);
     }
 }

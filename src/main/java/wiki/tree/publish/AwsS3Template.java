@@ -1,14 +1,16 @@
 package wiki.tree.publish;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.transfer.TransferManager;
+import com.amazonaws.services.s3.transfer.Upload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.core.io.WritableResource;
 import wiki.tree.document.domain.Document;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.InputStream;
 
 /**
  * @author chanwook
@@ -17,33 +19,39 @@ public class AwsS3Template {
 
     private final Logger logger = LoggerFactory.getLogger(AwsS3Template.class);
 
-    ResourceLoader resourceLoader;
+    private final AmazonS3 amazonS3;
 
-    public AwsS3Template(ResourceLoader resourceLoader) {
-        this.resourceLoader = resourceLoader;
+    public AwsS3Template(AmazonS3 amazonS3) {
+        this.amazonS3 = amazonS3;
     }
 
-    //TODO 1. 컨텐츠 타입 지정 2. Make public
+    //TODO 1. Make public
     public void publish(Document doc) throws IOException {
-        final String uploadPath = getUploadPath(doc);
+        final String content = doc.getContent();
 
-        final Resource resource = resourceLoader.getResource(uploadPath);
-        final WritableResource writableResource = (WritableResource) resource;
-        try (OutputStream outputStream = writableResource.getOutputStream()) {
+        TransferManager transferManager = new TransferManager(this.amazonS3);
+        final ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentType("text/html");
+        metadata.setContentLength(content.length());
 
-            if (logger.isDebugEnabled()) {
-                logger.debug("Upload Document to AWS S3 '" + uploadPath + "'+\tcontent(maybe long..): " + doc.getContent());
-            }
-
-            outputStream.write(doc.getContent().getBytes());
+        if (logger.isDebugEnabled()) {
+            logger.debug("Upload Document to AWS S3 treewiki:" + doc.getName() + "'+\tcontent(maybe long..): " + doc.getContent());
         }
+
+        final Upload upload = transferManager.upload("treewiki", doc.getName() + ".html", getInputStream(content), metadata);
+        try {
+            upload.waitForUploadResult();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
-    private String getUploadPath(Document doc) {
-        return "s3://treewiki/" + doc.getName() + ".html";
+    private InputStream getInputStream(String doc) {
+        return new ByteArrayInputStream(doc.getBytes());
     }
 
-    public ResourceLoader getResourceLoader() {
-        return resourceLoader;
+    public AmazonS3 getAmazonS3() {
+        return amazonS3;
     }
 }

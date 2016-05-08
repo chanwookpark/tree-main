@@ -4,14 +4,15 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/cloud/aws/context
-        http://www.springframework.org/schema/cloud/aws/context/spring-cloud-aws-context-1.0.xsd">
-
-    <aws-context:context-region region="ap-northeast-1"/>
+        http://www.springframework.org/schema/cloud/aws/context/spring-cloud-aws-context.xsd">
 
     <aws-context:context-credentials>
         <aws-context:simple-credentials access-key="${aws.access-key}" secret-key="${aws.secret-key}"/>
     </aws-context:context-credentials>
 
+    <aws-context:context-region region="ap-northeast-1" auto-detect="false"/>
+
     <!-- S3 -->
     <aws-context:context-resource-loader/>
+
 </beans>

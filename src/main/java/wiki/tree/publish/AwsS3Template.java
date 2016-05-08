@@ -1,7 +1,9 @@
 package wiki.tree.publish;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.Upload;
 import org.slf4j.Logger;
@@ -33,12 +35,18 @@ public class AwsS3Template {
         final ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType("text/html");
         metadata.setContentLength(content.length());
+        metadata.setContentEncoding("UTF-8");
 
         if (logger.isDebugEnabled()) {
             logger.debug("Upload Document to AWS S3 treewiki:" + doc.getName() + "'+\tcontent(maybe long..): " + doc.getContent());
         }
 
-        final Upload upload = transferManager.upload("treewiki", doc.getName() + ".html", getInputStream(content), metadata);
+//        final Upload upload = transferManager.upload("treewiki", doc.getName() + ".html", getInputStream(content), metadata);
+
+        final PutObjectRequest uploadRequest = new PutObjectRequest("treewiki", doc.getName() + ".html", getInputStream(content), metadata);
+        uploadRequest.withCannedAcl(CannedAccessControlList.PublicRead);
+        final Upload upload = transferManager.upload(uploadRequest);
+
         try {
             upload.waitForUploadResult();
         } catch (Exception e) {

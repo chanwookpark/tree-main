@@ -25,10 +25,11 @@
         {#document}
         <h1>{name}</h1>
         생성: {created} (rev: {revision}) 갱신: {updated} &nbsp;
-        {/document}
         <a href="/doc/edit/{name}" role="button">EDIT</a> &nbsp;
         <a href="/doc/{id}/file" role="button">FILE</a>&nbsp;
-        <a role="button" onclick="publishToS3('{name}')">PUBLISH(S3)</a>
+        <a role="button" onclick="publishToS3('{name}')">PUBLISH(S3)</a>&nbsp;
+        <a href="/doc/preview/{name}" role="button">PREVIEW</a>&nbsp;
+        {/document}
     </div>
 
     <div id="page-body">

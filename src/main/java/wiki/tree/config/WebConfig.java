@@ -60,12 +60,17 @@ public class WebConfig extends WebMvcAutoConfiguration.WebMvcAutoConfigurationAd
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        //TODO 제대로 매핑하기
         if (!registry.hasMappingForPattern("/templates/**")) {
             registry.addResourceHandler("/templates/**").addResourceLocations("classpath:/templates/");
         }
 
         if (!registry.hasMappingForPattern("/static/**")) {
             registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
+        }
+
+        if (!registry.hasMappingForPattern("/treewiki/**")) {
+            registry.addResourceHandler("/treewiki/**").addResourceLocations("classpath:/static/treewiki/");
         }
     }
 

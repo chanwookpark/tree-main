@@ -21,9 +21,18 @@ public class AsciidoctorDocumentConverter implements DocumentConverter {
 
     @Override
     public String convert() {
-        return convert(false);
+        // 기본은 헤더를 모두 가지고 오는 것으로...
+        return convert(true);
     }
 
+    /**
+     * <pre>
+     * true로 주면 <html></html>로 시작하는 HTML 전체 페이지를 반환한다.
+     * </pre>
+     *
+     * @param containsHeaderFooter
+     * @return
+     */
     @Override
     public String convert(boolean containsHeaderFooter) {
         final Asciidoctor asciidoctor = Asciidoctor.Factory.create();
@@ -34,7 +43,7 @@ public class AsciidoctorDocumentConverter implements DocumentConverter {
         final String html = asciidoctor.convert(doc.getContent(), options);
 
         if (logger.isDebugEnabled()) {
-            logger.debug("\n>> Source HTML\n" + doc.getContent() + "\n>>Converted HTML\n" + html);
+            logger.debug("[Source HTML]\n" + doc.getContent().trim() + "\n[Converted HTML]\n" + html.trim());
         }
 
         return html;

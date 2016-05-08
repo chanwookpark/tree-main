@@ -3,6 +3,7 @@ package wiki.tree.document.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import wiki.tree.document.domain.Document;
 import wiki.tree.document.domain.Tag;
 import wiki.tree.document.repository.DocumentRepository;
@@ -34,8 +35,11 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public void createDocument(Document doc, String tagString) {
         Document saved = dr.save(doc);
-        List<Tag> tagList = Tag.createTag(tagString, saved.getId());
-        tr.save(tagList);
+
+        if (StringUtils.hasText(tagString)) {
+            List<Tag> tagList = Tag.createTag(tagString, saved.getId());
+            tr.save(tagList);
+        }
     }
 
     @Override

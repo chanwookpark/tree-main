@@ -88,7 +88,7 @@ public class DocumentController {
 
             ds.createDocument(createDoc, form.getTag());
         }
-        return "redirect:/doc/" + encoding(form.getDocName());
+        return "redirect:/doc/view/" + encoding(form.getDocName());
     }
 
     private String getUserName() {
@@ -97,6 +97,7 @@ public class DocumentController {
     }
 
     private String encoding(String docName) throws UnsupportedEncodingException {
-        return URLEncoder.encode(docName, "UTF-8");
+        final String encoded = URLEncoder.encode(docName, "UTF-8");
+        return encoded;
     }
 }

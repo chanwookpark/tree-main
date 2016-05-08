@@ -10,14 +10,18 @@ public class AsciidoctorDocumentConverterTest {
 
     @Test
     public void simple() throws Exception {
-        convert("== title1 \n*title* is bold.\n== title 2\nHow?");
+        final String content =
+                "= 테스트 아티클\n" +
+                        "박찬욱<mail@mail.com>\n" +
+                        "== 타이틀1\n" +
+                        "블라블라\n";
+        final String converted = convert(content);
 
-        convert("= Article Title\nDoc Writer <mail@email.com>\nv1.0, 2016-01-30");
-
+        System.out.println(">>>>출력 결과>>>>\n" + converted);
     }
 
     private String convert(String content) {
-        return new AsciidoctorDocumentConverter(createDoc(content)).convert();
+        return new AsciidoctorDocumentConverter(createDoc(content)).convert(true);
     }
 
     private Document createDoc(String content) {

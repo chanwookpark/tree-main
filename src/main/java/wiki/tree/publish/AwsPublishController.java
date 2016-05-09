@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import wiki.tree.document.converter.AsciidoctorDocumentConverter;
 import wiki.tree.document.domain.Document;
-import wiki.tree.document.repository.DocumentRepository;
+import wiki.tree.document.repository.DocumentMongoRepository;
 
 import java.io.IOException;
 import java.net.URI;
@@ -25,7 +25,7 @@ public class AwsPublishController {
     private final Logger logger = LoggerFactory.getLogger(AwsPublishController.class);
 
     @Autowired
-    DocumentRepository dr;
+    DocumentMongoRepository dr;
 
     @Autowired
     AwsS3Template s3Template;

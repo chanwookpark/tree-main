@@ -6,6 +6,6 @@ import wiki.tree.document.domain.Document;
 /**
  * @author chanwook
  */
-public interface DocumentRepository extends MongoRepository<Document, String> {
+public interface DocumentMongoRepository extends MongoRepository<Document, String> {
     Document findByName(String docName);
 }

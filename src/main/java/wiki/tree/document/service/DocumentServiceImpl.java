@@ -6,8 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import wiki.tree.document.domain.Document;
 import wiki.tree.document.domain.Tag;
-import wiki.tree.document.repository.DocumentRepository;
-import wiki.tree.document.repository.TagRepository;
+import wiki.tree.document.repository.DocumentMongoRepository;
+import wiki.tree.document.repository.TagMongoRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +21,10 @@ import java.util.Map;
 public class DocumentServiceImpl implements DocumentService {
 
     @Autowired
-    private DocumentRepository dr;
+    private DocumentMongoRepository dr;
 
     @Autowired
-    private TagRepository tr;
+    private TagMongoRepository tr;
 
     @Override
     public void updateDocument(Document doc, String tagString) {

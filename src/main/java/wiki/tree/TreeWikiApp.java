@@ -24,6 +24,11 @@ public class TreeWikiApp {
         return "redirect:/home";
     }
 
+    @RequestMapping("/home")
+    public String viewHome() {
+        return "home";
+    }
+    
     @RequestMapping("/check")
     @ResponseBody
     public String check() {

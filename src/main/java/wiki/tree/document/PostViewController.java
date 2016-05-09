@@ -3,6 +3,8 @@ package wiki.tree.document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,8 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import wiki.tree.document.converter.AsciidoctorDocumentConverter;
 import wiki.tree.document.domain.Document;
 import wiki.tree.document.domain.Tag;
-import wiki.tree.document.repository.DocumentRepository;
-import wiki.tree.document.repository.TagRepository;
+import wiki.tree.document.repository.DocumentMongoRepository;
+import wiki.tree.document.repository.TagMongoRepository;
+import wiki.tree.document.service.UserService;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -32,10 +35,22 @@ public class PostViewController {
     private final Logger logger = LoggerFactory.getLogger(PostViewController.class);
 
     @Autowired
-    private DocumentRepository dr;
+    private DocumentMongoRepository dr;
 
     @Autowired
-    private TagRepository tr;
+    private TagMongoRepository tr;
+
+    @Autowired
+    private UserService us;
+
+    @RequestMapping("/change")
+    public String post(Pageable pageRequest, ModelMap model) {
+        final Page<Document> page = dr.findAll(pageRequest);
+        //TODO 새로짜기....
+        us.replaceUserIdToName(page.getContent());
+        model.put("postList", page.getContent());
+        return "post";
+    }
 
     @RequestMapping(value = "/doc/view/{name}", method = RequestMethod.GET)
     public String view(@PathVariable String name, ModelMap model) throws UnsupportedEncodingException {

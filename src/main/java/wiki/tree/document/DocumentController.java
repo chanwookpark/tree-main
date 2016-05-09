@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import wiki.tree.document.domain.Document;
 import wiki.tree.document.domain.Tag;
-import wiki.tree.document.repository.DocumentRepository;
-import wiki.tree.document.repository.TagRepository;
+import wiki.tree.document.repository.DocumentMongoRepository;
+import wiki.tree.document.repository.TagMongoRepository;
 import wiki.tree.document.service.DocumentService;
 
 import java.io.UnsupportedEncodingException;
@@ -31,10 +31,10 @@ public class DocumentController {
     private final Logger logger = LoggerFactory.getLogger(DocumentController.class);
 
     @Autowired
-    private DocumentRepository dr;
+    private DocumentMongoRepository dr;
 
     @Autowired
-    private TagRepository tr;
+    private TagMongoRepository tr;
 
     @Autowired
     private DocumentService ds;

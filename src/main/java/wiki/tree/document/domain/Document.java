@@ -29,6 +29,9 @@ public class Document {
 
     private String updateUser;
 
+    //TODO 별도 Entity로 분리
+    private String publishURI;
+
     public Document() {
     }
 
@@ -94,6 +97,14 @@ public class Document {
 
     public void setUpdateUser(String updateUser) {
         this.updateUser = updateUser;
+    }
+
+    public String getPublishURI() {
+        return publishURI;
+    }
+
+    public void setPublishURI(String publishURI) {
+        this.publishURI = publishURI;
     }
 
     public void update(String updateContent, Date updateTime, String updateUser) {

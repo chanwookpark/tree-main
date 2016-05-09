@@ -4,15 +4,17 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.Upload;
+import com.amazonaws.services.s3.transfer.model.UploadResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import wiki.tree.document.domain.Document;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 
 /**
  * @author chanwook
@@ -28,9 +30,7 @@ public class AwsS3Template {
     }
 
     //TODO 1. Make public
-    public void publish(Document doc) throws IOException {
-        final String content = doc.getContent();
-
+    public URI publish(String name, String content) throws IOException {
         TransferManager transferManager = new TransferManager(this.amazonS3);
         final ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType("text/html");
@@ -38,17 +38,19 @@ public class AwsS3Template {
         metadata.setContentEncoding("UTF-8");
 
         if (logger.isDebugEnabled()) {
-            logger.debug("Upload Document to AWS S3 treewiki:" + doc.getName() + "'+\tcontent(maybe long..): " + doc.getContent());
+            logger.debug("Upload Document to AWS S3 treewiki:" + name + "'+\tcontent(maybe long..): " + content.trim());
         }
 
-//        final Upload upload = transferManager.upload("treewiki", doc.getName() + ".html", getInputStream(content), metadata);
-
-        final PutObjectRequest uploadRequest = new PutObjectRequest("treewiki", doc.getName() + ".html", getInputStream(content), metadata);
+        final PutObjectRequest uploadRequest = new PutObjectRequest("treewiki", name + ".html", getInputStream(content), metadata);
         uploadRequest.withCannedAcl(CannedAccessControlList.PublicRead);
         final Upload upload = transferManager.upload(uploadRequest);
 
         try {
-            upload.waitForUploadResult();
+            final UploadResult uploadResult = upload.waitForUploadResult();
+
+            // 업로드한 오브젝트의 URI를 반환
+            final S3Object object = amazonS3.getObject(uploadRequest.getBucketName(), uploadResult.getKey());
+            return object.getObjectContent().getHttpRequest().getURI();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

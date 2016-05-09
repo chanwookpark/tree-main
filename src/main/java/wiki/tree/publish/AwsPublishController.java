@@ -14,6 +14,7 @@ import wiki.tree.document.domain.Document;
 import wiki.tree.document.repository.DocumentRepository;
 
 import java.io.IOException;
+import java.net.URI;
 
 /**
  * @author chanwook
@@ -35,10 +36,11 @@ public class AwsPublishController {
 
         //TODO Document 정보로 문서 헤더 꾸미기.
         final String convertedHtml = new AsciidoctorDocumentConverter(doc).convert(true);
-        doc.setContent(convertedHtml); // change to converted HTML
-
         try {
-            s3Template.publish(doc);
+            final URI objectURI = s3Template.publish(doc.getName(), convertedHtml);
+            //TODO 별도 서비스로 정리해 분리
+            doc.setPublishURI(objectURI.toString());
+            dr.save(doc);
         } catch (IOException e) {
             logger.error("Failed upload document!", e);
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);

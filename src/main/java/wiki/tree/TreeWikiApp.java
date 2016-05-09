@@ -19,6 +19,11 @@ public class TreeWikiApp {
         SpringApplication.run(TreeWikiApp.class, args);
     }
 
+    @RequestMapping("/")
+    public String index() {
+        return "redirect:/home";
+    }
+
     @RequestMapping("/check")
     @ResponseBody
     public String check() {

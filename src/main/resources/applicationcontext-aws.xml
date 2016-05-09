@@ -10,7 +10,7 @@
         <aws-context:simple-credentials access-key="${aws.access-key}" secret-key="${aws.secret-key}"/>
     </aws-context:context-credentials>
 
-    <aws-context:context-region region="ap-northeast-1" auto-detect="false"/>
+    <aws-context:context-region region="ap-northeast-2" auto-detect="false"/>
 
     <!-- S3 -->
     <aws-context:context-resource-loader/>
